@@ -124,46 +124,4 @@ class ProductsController extends AbstractController
       return false;
   }
 
-  /**
- * @Route("/admin/products/{id}/edit", name="product_edit")
- */
-public function editAction($id, Request $request, SluggerInterface  $slugger )
-{
-    $em = $this->getDoctrine()->getManager();
-    $product = $em->getRepository('App\Entity\Products')->find($id);
-    
-    $form = $this->createForm(ProductsType::class, $product);
-    
-    if ($this->saveChanges($form, $request, $product,  $slugger)) {
-        $this->addFlash(
-            'notice',
-            'Todo Edited'
-        );
-        return $this->redirectToRoute('products_index');
-    }
-    
-    return $this->render('products/edit.html.twig', [
-        'form' => $form->createView()
-    ]);
-}
-
-
-/**
- * @Route("/products/delete/{id}", name="product_delete")
- */
-public function deleteAction($id)
-{ 
-
-    $em = $this->getDoctrine()->getManager();
-    $product = $em->getRepository('App\Entity\Products')->find($id);
-    $em->remove($product);
-    $em->flush();
-    
-    $this->addFlash(
-        'error',
-        'Todo deleted'
-    );
-  
-    return $this->redirectToRoute('products_index');
-  }
 }
